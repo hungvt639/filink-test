@@ -76,7 +76,7 @@ const FormFilter = (props: FormFilterProps) => {
 
             <div className="submit-btn flex justify-end">
                 <button type="reset" className="mx-5">
-                    All
+                    Reset
                 </button>
                 <button type="submit">Filter</button>
             </div>

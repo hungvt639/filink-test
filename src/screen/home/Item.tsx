@@ -12,10 +12,11 @@ const Index = (props: FundProjects) => {
         totalRaise,
         coverPhoto,
         photo,
+        status,
     } = props;
     return (
         <div className="_item flex flex-col">
-            <div className="sold-out">Sold Out</div>
+            <div className="sold-out">{status}</div>
             <div className="image">
                 <img src={coverPhoto} alt="item img" />
                 <img className="photo" src={photo} alt="Frame 39" />

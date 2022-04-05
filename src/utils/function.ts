@@ -32,8 +32,9 @@ export const getBalanceNumber = (
     const div = BigNumber.from((10 ** decimals).toString());
     const start = balance.div(div).toString();
     const end = balance.mod(div).toString();
-    return parseFloat(parseFloat(start + "." + end).toFixed(toFixed));
-    // return balance.div(div).toString();
+    let strings = "";
+    for (let i = decimals - end.length; i > 0; i--) strings += "0";
+    return parseFloat(parseFloat(start + "." + strings + end).toFixed(toFixed));
 };
 
 export const getMaxSecond = (arr: Transaction[]) => {
