@@ -4,17 +4,27 @@ import { FundProjects } from "./hooks/useItem";
 import { showDate } from "../../utils/function";
 
 const Index = (props: FundProjects) => {
-    const { photo, startOn, symbol, name, personalAllocation, totalRaise } =
-        props;
+    const {
+        startOn,
+        symbol,
+        name,
+        personalAllocation,
+        totalRaise,
+        coverPhoto,
+        photo,
+    } = props;
     return (
         <div className="_item flex flex-col">
             <div className="sold-out">Sold Out</div>
-            <img src={photo} alt="item img" className="image" />
+            <div className="image">
+                <img src={coverPhoto} alt="item img" />
+                <img className="photo" src={photo} alt="Frame 39" />
+            </div>
             <div className="flex flex-row justify-between item-name">
                 <h1>{name}</h1>
                 <img src={Coin} alt="Coin" />
             </div>
-            <p className="bcmc">{symbol}</p>
+            <p className="symbol">{`$${symbol}`}</p>
             <div className="flex flex-row justify-between items-center total-raise">
                 <p>Total Raise</p>
                 <span>{`$${totalRaise} Max`}</span>

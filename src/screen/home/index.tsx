@@ -2,32 +2,68 @@ import "./style.scss";
 import useItem from "./hooks/useItem";
 import Item from "./Item";
 import Money from "./Money";
-import useMoney from "./hooks/useMoney";
 import FormFilter from "./FormFilter";
+import InfiniteScroll from "react-infinite-scroll-component";
+import useEthers from "./hooks/useEthers";
+import { getBalanceNumber } from "../../utils/function";
 const Index = () => {
-    const { items, setBodyApi, bodyApi } = useItem();
-    const { moneys } = useMoney();
+    const { items, setBodyApi, bodyApi, fetchMoreData, totalItem, initData } =
+        useItem();
+    const { totalTransactions, blockTime, avgValue, maxSecondTx } = useEthers();
     return (
         <div className="w-full _home">
-            {/* <div className="home-content"> */}
             <h2 className="text-center">2nd largest of Transactions:</h2>
             <p className="text-center">1.10 ETH</p>
             <div className="flex moneys">
-                {moneys.map((m, index) => (
-                    <Money {...m} key={index} />
-                ))}
+                <Money
+                    name="Total transactions:"
+                    color="#F0D042"
+                    value={totalTransactions}
+                />
+                <Money
+                    name="AVG of block time"
+                    color="#31B4D9"
+                    value={blockTime}
+                />
+                <Money
+                    name="AVG of ETH/transactions"
+                    color="#1F8B24"
+                    value={`${avgValue.toFixed(2)} ETH`}
+                />
             </div>
-            <FormFilter setBodyApi={setBodyApi} bodyApi={bodyApi} />
+            {maxSecondTx && (
+                <div className="max-second-tx">
+                    <div className="detail">
+                        <h1>Transaction has ETH of second-largest</h1>
+                        <h3>blockHash: {maxSecondTx.blockHash}</h3>
+                        <p>blockNumber: {maxSecondTx.blockNumber}</p>
+                        <p>from: {maxSecondTx.from}</p>
+                        <p>to: {maxSecondTx.to}</p>
+                        <p>ETH: {getBalanceNumber(maxSecondTx.value)}</p>
+                    </div>
+                </div>
+            )}
+            <FormFilter
+                setBodyApi={setBodyApi}
+                bodyApi={bodyApi}
+                initData={initData}
+            />
 
-            <div className="items flex flex-wrap">
+            <InfiniteScroll
+                dataLength={items.length}
+                next={fetchMoreData}
+                hasMore={totalItem !== items.length}
+                loader={
+                    <div className="flex justify-center w-full">
+                        <div className="see-all">Loading...</div>
+                    </div>
+                }
+                className="items flex flex-wrap"
+            >
                 {items.map((item, index) => (
                     <Item {...item} key={index} />
                 ))}
-            </div>
-            <div className="flex justify-center">
-                <div className="see-all">See All Funded Projects</div>
-            </div>
-            {/* </div> */}
+            </InfiniteScroll>
             <div className="footer"></div>
         </div>
     );

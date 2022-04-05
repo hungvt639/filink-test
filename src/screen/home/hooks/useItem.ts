@@ -18,28 +18,41 @@ export interface BodyApi {
     symbol: string;
     name: string;
     status: string;
-    totalRaise: number[];
-    "personal Allocation": number[];
+    totalRaise: [number, number];
+    personalAllocation: [number, number];
 }
+
 const useItem = () => {
-    const [items, setItems] = useState<FundProjects[]>([]);
-    const [bodyApi, setBodyApi] = useState<BodyApi>({
+    const initData: BodyApi = {
         page: 1,
-        pageSize: 10,
+        pageSize: 8,
         symbol: "",
         name: "",
         status: "SOLD_OUT",
         totalRaise: [100, 200],
-        "personal Allocation": [0.07, 0.08],
-    });
+        personalAllocation: [0.07, 0.08],
+    };
+    const [totalItem, setTotalItem] = useState(0);
+    const [items, setItems] = useState<FundProjects[]>([]);
+    const [bodyApi, setBodyApi] = useState<BodyApi>(initData);
     const getItems = useCallback(async () => {
-        const res = await API.test.getData(bodyApi);
-        console.log(res);
-        setItems(res.data.data.fundProjects);
+        try {
+            const res = await API.test.getData(bodyApi);
+
+            if (bodyApi.page === 1) setItems(res.data.data.fundProjects);
+            else setItems((data) => [...data, ...res.data.data.fundProjects]);
+            setTotalItem(res.data.data.totalRecords);
+        } catch (e) {
+            console.log(e);
+        }
     }, [bodyApi]);
     useEffect(() => {
         getItems();
     }, [getItems]);
-    return { items, setBodyApi, bodyApi };
+
+    async function fetchMoreData() {
+        setBodyApi({ ...bodyApi, page: bodyApi.page + 1 });
+    }
+    return { items, setBodyApi, bodyApi, fetchMoreData, totalItem, initData };
 };
 export default useItem;
