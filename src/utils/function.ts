@@ -1,4 +1,5 @@
 import { BigNumber, Transaction } from "ethers";
+import { Transaction as TransactionW3 } from "web3-core";
 
 const months = [
     "January",
@@ -50,6 +51,34 @@ export const getMaxSecond = (arr: Transaction[]) => {
             getBalanceNumber(arr[i].value) >
                 getBalanceNumber(arr[secondIndex].value) &&
             getBalanceNumber(arr[i].value) < max
+        )
+            secondIndex = i;
+    }
+    return arr[secondIndex];
+};
+
+export const getBalanceNumberW3 = (
+    balance?: string,
+    decimals = 18,
+    toFixed = 9
+) => {
+    if (!balance) return 0;
+    return parseFloat((parseInt(balance) / 10 ** decimals).toFixed(toFixed));
+};
+
+export const getMaxSecondW3 = (arr: TransactionW3[]) => {
+    if (arr.length < 2) return undefined;
+    let max = getBalanceNumberW3(arr[0].value);
+    let secondIndex = 0;
+    for (let i = 1; i < arr.length; i++) {
+        if (getBalanceNumberW3(arr[i].value) > max)
+            max = getBalanceNumberW3(arr[i].value);
+    }
+    for (let i = 0; i < arr.length; i++) {
+        if (
+            getBalanceNumberW3(arr[i].value) >
+                getBalanceNumberW3(arr[secondIndex].value) &&
+            getBalanceNumberW3(arr[i].value) < max
         )
             secondIndex = i;
     }

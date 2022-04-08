@@ -1,11 +1,9 @@
 import { ethers } from "ethers";
-const PROVIDER_URL =
-    "https://rinkeby.infura.io/v3/e5b97339938341618b45e7e0d7e7d225";
-const PROVIDER_NETWORK = 4;
+import _env from "../_env";
 export const jsonProvider = () => {
     const provider = new ethers.providers.JsonRpcProvider(
-        PROVIDER_URL,
-        PROVIDER_NETWORK
+        _env.PROVIDER_URL,
+        _env.PROVIDER_NETWORK
     );
     return provider;
 };

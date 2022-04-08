@@ -2,13 +2,14 @@ import axios from "axios";
 import http from "http";
 import https from "https";
 import { AxiosInstance } from "axios";
+import _env from "../_env";
 
 type Header = {
     Accept: string;
     "Content-Type": string;
     Authorization?: string;
 };
-const baseURL = `${"http://139.99.62.190:8000"}/`;
+const baseURL = `${_env.BACKEND}/`;
 
 function config(baseAPI: string) {
     const instance = axios.create({
